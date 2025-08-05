@@ -80,6 +80,9 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+# show hidden files for tap completion
+zstyle ':fzf-tab:*' command 'ls -A --color=always'
+
 
 # After zsh-syntax-highlighting is sourced
 ZSH_HIGHLIGHT_STYLES[command]='fg=green'
@@ -98,24 +101,37 @@ alias ls='ls --color'
 # Start starship prompt
 eval "$(starship init zsh)"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-        . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
-    else
-        export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# Keep prompt clean
-conda config --set changeps1 False
-# disable auto base activation
-conda config --set auto_activate_base false
-# <<< conda initialize <<<
+# # >>> conda initialize >>>
+# # !! Contents within this block are managed by 'conda init' !!
+# __conda_setup="$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+#         . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/opt/homebrew/Caskroom/miniconda/base/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
+# # Keep prompt clean
+# conda config --set changeps1 False
+# # disable auto base activation
+# conda config --set auto_activate_base false
+# # <<< conda initialize <<<
+
+# CONDA LAZY EVALUATION
+# this reduces startup time enorm
+# Lazy-load conda
+conda() {
+    # Initialize conda on first use
+    unset -f conda
+    . "/opt/homebrew/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    conda "$@"
+    conda config --set changeps1 False
+	conda config --set auto_activate_base false
+}
+
 
 # end of time analyze section 
 # zprof
