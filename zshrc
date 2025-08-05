@@ -14,7 +14,7 @@ if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
 fi
 
 
-eval"$(/opt/homebrew/bin/brew shellenv)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 # autoload -Uz _zinit
