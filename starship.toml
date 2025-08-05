@@ -1,0 +1,65 @@
+# Make the prompt a single line
+add_newline = false
+#format = "$username$hostname$directory$git_branch$git_status$conda$character"
+format = "$username$hostname$directory$git_branch$git_status$conda$python$rust$docker_context$memory_usage$jobs$cmd_duration$character"
+
+# Optional: Customize the prompt character with colors
+[character]
+success_symbol = "[➔ ](bold green)"
+error_symbol = "[✗ ](bold red)"
+
+# Conda environment
+[conda]
+symbol = "🅒 "                     # Optional icon for conda
+style = "bold green"              # Make it stand out
+ignore_base = true                # Show even the base environment
+
+# Python runtime
+[python]
+format = "[Py: $version ]($style) "
+style = "yellow"
+pyenv_version_name = true
+python_binary = "python3"
+
+# Rust runtime
+[rust]
+format = "[RS: $version ]($style) "
+style = "bold red"
+
+# Docker context
+[docker_context]
+symbol = "🐳 "
+format = "[$symbol$context ]($style) "
+style = "cyan"
+only_with_files = false
+
+[username]
+style_user = "bold white"     # Style when normal user
+style_root = "bold red"      # Style when root
+show_always = false          # Only show on SSH or if root
+format = "[$user ]($style)"
+
+# Hostname (useful on SSH)
+[hostname]
+ssh_only = true
+format = "[@$hostname ]($style) "
+style = "bold purple"
+
+# Show memory usage
+[memory_usage]
+format = "[RAM: $ram ]($style) "
+threshold = 0
+style = "bold blue"
+
+# Show number of background jobs
+[jobs]
+threshold = 1
+format = "[bgJobs: $number ]($style) "
+style = "bold yellow"
+
+# Show execution time for long-running commands
+[cmd_duration]
+min_time = 0          # Only show if command >2s
+show_milliseconds = true
+format = "[⏱ $duration ](yellow)"
+
