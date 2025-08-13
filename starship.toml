@@ -5,8 +5,8 @@ format = "$username$hostname$directory$git_branch$git_status$conda$python$rust$d
 
 # Optional: Customize the prompt character with colors
 [character]
-success_symbol = "[➔ ](bold green)"
-error_symbol = "[✗ ](bold red)"
+success_symbol = "[➔](bold green)"
+error_symbol = "[✗](bold red)"
 
 # Conda environment
 [conda]
@@ -16,7 +16,7 @@ ignore_base = true                # Show even the base environment
 
 # Python runtime
 [python]
-format = "[Py: $version ]($style) "
+format = "[Py: $version]($style) "
 style = "yellow"
 pyenv_version_name = true
 python_binary = "python3"
