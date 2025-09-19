@@ -1,0 +1,11 @@
+[user]
+    name = G-H. Wiegand
+    useConfigOnly = true
+
+
+
+[includeIf "gitdir:~/code/github/"]
+    path = ~/.gitconfig-github
+
+[includeIf "gitdir:~/code/gitlab/"]
+    path = ~/.gitconfig-gitlab
