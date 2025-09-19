@@ -1,8 +1,11 @@
 # time zsh startup
 # zmodload zsh/zprof
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # autoload things
 autoload -Uz _zinit
+
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -14,7 +17,6 @@ if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
 fi
 
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 # autoload -Uz _zinit
@@ -30,6 +32,14 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
+autoload -Uz compinit
+# enshure cached file
+compinit -C 
+# run the following to rebuild the cache after new installations:
+# rm ~/.zcompdump*
+# exec zsh
+
+
 
 ### Add in zsh plugins 
 zinit light zsh-users/zsh-completions
@@ -38,27 +48,31 @@ zinit light Aloxaf/fzf-tab
 zinit light zsh-users/zsh-syntax-highlighting
 
 # add in snippets from oh my zsh plugins
-zinit snippet OMZP::command-not-found
-
-autoload -Uz compinit
-# enshure cached file
-compinit -C 
-# run the following to rebuild the cache after new installations:
-# rm ~/.zcompdump*
-# exec zsh
-
+# zinit snippet OMZP::command-not-found
 
 
 zinit cdreplay -q
 
-autoload -Uz compinit
+autoload -Uz compinit -C
 # enshure cached file
-compinit -C 
+# compinit -C 
 # run the following to rebuild the cache after new installations:
 # rm ~/.zcompdump*
 # exec zsh
 
-
+# Hook brew commands to clean zsh completion cache after install/upgrade
+brew() {
+    # Run the real brew command
+    command brew "$@"
+    
+    # Check if it was an install or upgrade
+    if [[ "$1" == "install" || "$1" == "upgrade" || "$1" == "uninstall" ]]; then
+        echo "[zsh] Cleaning completion cache..."
+        rm -f ~/.zcompdump*
+        # Trigger regeneration of zcompdump for current session
+        compinit -C
+    fi
+}
 
 # comand history
 HISTSIZE=5000
@@ -79,10 +93,9 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-# show hidden files for tap completion
-zstyle ':fzf-tab:*' command 'ls -A --color=always'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls -A --color=always $realpath'
 
+# Use fzf-tab default command, no need to set :fzf-tab:* command anymore
 
 # After zsh-syntax-highlighting is sourced
 ZSH_HIGHLIGHT_STYLES[command]='fg=green'
@@ -131,6 +144,9 @@ conda() {
     conda config --set changeps1 False
 	conda config --set auto_activate_base false
 }
+
+# ALIASES
+alias pip='pip3'
 
 
 # end of time analyze section 
